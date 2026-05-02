@@ -21,91 +21,119 @@
 
 <body>
 
-    <!-- Top Header -->
-    <header>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="icon-512.png" alt="Logo" style="width: 48px; height: 48px;">
-            <h1 style="margin: 0;">St. Luke Family</h1>
+
+    <div id="auth-screen" class="auth-wrapper">
+        <div class="auth-card">
+            <span style="font-size: 3rem;">🔒</span>
+            <h2>Organizer Access</h2>
+            <p>Please enter the organizer PIN to access the scanner.</p>
+            
+            <div class="input-group">
+                <input type="password" id="organizer-pin" placeholder="Enter PIN" pattern="[0-9]*" inputmode="numeric">
+                <p id="pin-error" class="hidden" style="color: #b91c1c; font-size: 0.85rem; margin-top: 4px;">Incorrect PIN.</p>
+            </div>
+            
+            <button id="btn-submit-pin" class="btn primary">Unlock App</button>
+            
+            <!-- Helpful link to redirect lost attendees back to the generator -->
+            <a href="generate.html" style="display: block; margin-top: 20px; color: var(--primary); text-decoration: none; font-size: 0.9rem;">
+                Are you an attendee? Get your QR code here.
+            </a>
         </div>
-        <span id="sync-status" class="status-badge offline">Offline</span>
-    </header>
+    </div>
 
-    <!-- Main Content Area: This holds our three different "screens" -->
-    <main>
-
-        <!-- View 1: The QR Scanner -->
-        <section id="view-scan" class="view active">
-            <h2>Scan Attendee</h2>
-            <p>Point the camera at the attendee's QR code.</p>
-
-            <!-- The html5-qrcode library will inject the camera feed into this div -->
-            <div id="reader"></div>
-
-            <div id="scan-result-msg" class="hidden"></div>
-        </section>
-
-        <!-- View 2: Register Newcomer -->
-        <section id="view-register" class="view hidden">
-            <h2>Register Newcomer</h2>
-            <p>Generate a permanent QR code for new attendees.</p>
-
-            <form id="register-form">
-                <div class="input-group">
-                    <label for="full-name">Full Name (in Arabic)</label>
-                    <input type="text" id="full-name" pattern="^[\u0600-\u06FF\s]+$"
-                        title="Please enter the name in Arabic only" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="group-number">Group Number (3 Digits)</label>
-                    <input type="number" id="group-number" placeholder="e.g., 197" min="170" max="300" required>
-                </div>
-
-                <button type="submit" class="btn primary">Generate QR Code</button>
-            </form>
-
-            <!-- Container to display the generated QR code on the organizer's screen -->
-            <div id="generated-qr-container" class="hidden">
-                <h3>Have the attendee take a photo of this:</h3>
-                <div id="qrcode-display"></div>
-                <button type="button" id="btn-clear-qr" class="btn secondary">Clear & Next</button>
+    <!-- We wrap the rest of the app in this container, hidden by default -->
+    <div id="app-container" style="display: none;">
+        
+        <!-- Top Header -->
+        <header>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="icon-512.png" alt="Logo" style="width: 48px; height: 48px;">
+                <h1 style="margin: 0;">St. Luke Family</h1>
             </div>
-        </section>
+            <span id="sync-status" class="status-badge offline">Offline</span>
+        </header>
+    
+        <!-- Main Content Area: This holds our three different "screens" -->
+        <main>
+    
+            <!-- View 1: The QR Scanner -->
+            <section id="view-scan" class="view active">
+                <h2>Scan Attendee</h2>
+                <p>Point the camera at the attendee's QR code.</p>
+    
+                <!-- The html5-qrcode library will inject the camera feed into this div -->
+                <div id="reader"></div>
+    
+                <div id="scan-result-msg" class="hidden"></div>
+            </section>
+    
+            <!-- View 2: Register Newcomer -->
+            <section id="view-register" class="view hidden">
+                <h2>Register Newcomer</h2>
+                <p>Generate a permanent QR code for new attendees.</p>
+    
+                <form id="register-form">
+                    <div class="input-group">
+                        <label for="full-name">Full Name (in Arabic)</label>
+                        <input type="text" id="full-name" pattern="^[\u0600-\u06FF\s]+$"
+                            title="Please enter the name in Arabic only" required>
+                    </div>
+    
+                    <div class="input-group">
+                        <label for="group-number">Group Number (3 Digits)</label>
+                        <input type="number" id="group-number" placeholder="e.g., 197" min="170" max="300" required>
+                    </div>
+    
+                    <button type="submit" class="btn primary">Generate QR Code</button>
+                </form>
+    
+                <!-- Container to display the generated QR code on the organizer's screen -->
+                <div id="generated-qr-container" class="hidden">
+                    <h3>Have the attendee take a photo of this:</h3>
+                    <div id="qrcode-display"></div>
+                    <button type="button" id="btn-clear-qr" class="btn secondary">Clear & Next</button>
+                </div>
+            </section>
+    
+            <!-- View 3: Sync Data -->
+            <section id="view-sync" class="view hidden">
+                <h2>Cloud Sync</h2>
+                <p>Push local attendance records to the Google Sheet.</p>
+    
+                <div class="stats-card">
+                    <h3>Unsynced Records</h3>
+                    <h1 id="unsynced-count">0</h1>
+                </div>
+    
+                <button id="btn-sync" class="btn primary">Sync Now</button>
+                <div id="sync-log"></div>
+            </section>
+    
+        </main>
+    
+        <!-- Bottom Navigation Bar (Standard mobile app UX) -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-target="view-scan">
+                <span>📷 Scan</span>
+            </button>
+            <button class="nav-btn" data-target="view-register">
+                <span>➕ New</span>
+            </button>
+            <button class="nav-btn" data-target="view-sync">
+                <span>☁️ Sync</span>
+            </button>
+        </nav>
+    
+        <!-- Link to the JavaScript we will write in Phases 2 and 4 -->
+        <script src="app.js"></script>
+    
+        <!-- External Library for QR Generation (Loaded via CDN for now, but can be downloaded for pure offline later) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+        
+    </div>
 
-        <!-- View 3: Sync Data -->
-        <section id="view-sync" class="view hidden">
-            <h2>Cloud Sync</h2>
-            <p>Push local attendance records to the Google Sheet.</p>
 
-            <div class="stats-card">
-                <h3>Unsynced Records</h3>
-                <h1 id="unsynced-count">0</h1>
-            </div>
-
-            <button id="btn-sync" class="btn primary">Sync Now</button>
-            <div id="sync-log"></div>
-        </section>
-
-    </main>
-
-    <!-- Bottom Navigation Bar (Standard mobile app UX) -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active" data-target="view-scan">
-            <span>📷 Scan</span>
-        </button>
-        <button class="nav-btn" data-target="view-register">
-            <span>➕ New</span>
-        </button>
-        <button class="nav-btn" data-target="view-sync">
-            <span>☁️ Sync</span>
-        </button>
-    </nav>
-
-    <!-- Link to the JavaScript we will write in Phases 2 and 4 -->
-    <script src="app.js"></script>
-
-    <!-- External Library for QR Generation (Loaded via CDN for now, but can be downloaded for pure offline later) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 </body>
 

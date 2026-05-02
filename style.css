@@ -252,3 +252,34 @@ input:focus {
     color: #b91c1c;
     border: 1px solid #ef4444;
 }
+
+/* --- Auth Screen --- */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--bg-color);
+    padding: 20px;
+}
+
+.auth-card {
+    background-color: var(--surface);
+    padding: 32px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-card h2 {
+    margin: 12px 0 8px 0;
+}
+
+.auth-card input {
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+}
