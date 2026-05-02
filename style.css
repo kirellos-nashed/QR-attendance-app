@@ -1,0 +1,254 @@
+/* --- Core Variables & Reset --- */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg-color: #f8fafc;
+    --surface: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --offline: #f59e0b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Uses the native font of whatever phone the app is running on */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    /* Crucial: Prevents the bottom content from hiding behind the fixed navigation bar */
+    padding-bottom: 90px; 
+    /* Removes the default blue highlight when tapping buttons on Android/iOS */
+    -webkit-tap-highlight-color: transparent; 
+}
+
+/* --- Header --- */
+header {
+    background-color: var(--surface);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.offline {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.status-badge.online {
+    background-color: #d1fae5;
+    color: #047857;
+}
+
+/* --- Main Views & Typography --- */
+main {
+    padding: 20px;
+}
+
+.view {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* This simple class is how we swap between screens instantly */
+.view.hidden {
+    display: none;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+}
+
+p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* --- Forms & Inputs --- */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+input {
+    width: 100%;
+    padding: 16px; /* Large padding for easy tapping */
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background-color: var(--surface);
+    transition: border-color 0.2s;
+}
+
+/* Visual focus state when typing */
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- Buttons --- */
+.btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+/* Creates a "push down" effect when tapped */
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn.primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn.secondary {
+    background-color: #e2e8f0;
+    color: var(--text-main);
+    margin-top: 12px;
+}
+
+/* --- Scanner & QR Components --- */
+#reader {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px dashed var(--border);
+    background-color: var(--surface);
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#generated-qr-container {
+    background-color: var(--surface);
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+    margin-top: 16px;
+}
+
+#qrcode-display {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* --- Stats Card (Sync Page) --- */
+.stats-card {
+    background-color: var(--surface);
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+}
+
+.stats-card h1 {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-top: 8px;
+}
+
+/* --- Bottom Navigation --- */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--surface);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0 24px 0; /* The bottom 24px accounts for the iPhone home bar */
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+    z-index: 20;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 12px;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.nav-btn.active {
+    color: var(--primary);
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+/* --- Scan Result Messages --- */
+#scan-result-msg {
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    transition: opacity 0.3s;
+}
+
+#scan-result-msg.success {
+    background-color: #d1fae5;
+    color: #047857;
+    border: 1px solid #10b981;
+}
+
+#scan-result-msg.error {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #ef4444;
+}
