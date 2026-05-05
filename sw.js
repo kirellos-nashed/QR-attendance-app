@@ -1,6 +1,6 @@
 // A unique name for our cache. 
 // If you ever update your CSS or JS in the future, change this to 'v2' so phones know to download the new files.
-const CACHE_NAME = 'attendance-app-v12';
+const CACHE_NAME = 'attendance-app-v15';
 
 // Every single file the app needs to run completely offline
 const ASSETS_TO_CACHE = [
