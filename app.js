@@ -10,7 +10,7 @@ if ('serviceWorker' in navigator) {
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. DECLARE GLOBALS AND CONSTANTS FIRST
-    const SECRET_PIN = "852456"; 
+    const SECRET_HASH = "2e215efc1d00ed91a0852851e3feba33edfc1109f77fb43ae4fdbbae583bcda0";
     let db;
     const DB_NAME = 'AttendanceDB';
     const DB_VERSION = 5;
@@ -22,14 +22,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSubmitPin = document.getElementById('btn-submit-pin');
     const pinError = document.getElementById('pin-error');
 
+    // Helper function: Converts a plain text PIN into a secure SHA-256 hash using the browser's native cryptography
+    async function hashPIN(pin) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(pin);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
     // 1. Check if the phone is already authorized from a previous session
     if (localStorage.getItem('isOrganizerUnlocked') === 'true') {
         unlockApp();
     }
 
-    // 2. Handle PIN submission
-    btnSubmitPin.addEventListener('click', () => {
-        if (pinInput.value === SECRET_PIN) {
+    // 2. Handle PIN submission securely
+    btnSubmitPin.addEventListener('click', async () => { // Note the 'async' added here
+
+        // Hash whatever the user just typed into the box
+        const enteredHash = await hashPIN(pinInput.value);
+
+        // Compare the hashes, not the plain text!
+        if (enteredHash === SECRET_HASH) {
             localStorage.setItem('isOrganizerUnlocked', 'true');
             unlockApp();
         } else {
