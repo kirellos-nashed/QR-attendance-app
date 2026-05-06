@@ -29,9 +29,11 @@
             <p>Please enter the organizer PIN to access the scanner.</p>
 
             <div class="input-group">
-                <input type="password" id="organizer-pin" placeholder="Enter PIN" pattern="[0-9]*" inputmode="numeric">
-                <p id="pin-error" class="hidden" style="color: #b91c1c; font-size: 0.85rem; margin-top: 4px;">Incorrect
-                    PIN.</p>
+                <!-- Changed type, pattern, and removed inputmode -->
+                <input type="password" id="organizer-pin" placeholder="Enter Password" pattern=".*">
+                <p id="pin-error" class="hidden" style="color: #b91c1c; font-size: 0.85rem; margin-top: 4px;">
+                    Incorrect Password.
+                </p>
             </div>
 
             <button id="btn-submit-pin" class="btn primary">Unlock App</button>

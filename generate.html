@@ -9,10 +9,13 @@
     <style>
         :root {
             --primary: #2563eb;
+            --primary-hover: #1d4ed8;
             --bg-color: #f8fafc;
             --surface: #ffffff;
             --text-main: #0f172a;
             --border: #e2e8f0;
+            --accent-warm: #ec4899;
+            /* Added a warm accent color for the friendly text */
         }
 
         body {
@@ -29,36 +32,49 @@
 
         .container {
             background-color: var(--surface);
-            padding: 30px 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
 
-        h1 {
-            font-size: 1.5rem;
-            margin-top: 0;
+        .logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            /* Optional: makes the logo circular if appropriate */
         }
 
-        p {
+        h1 {
+            font-size: 1.6rem;
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        p.subtitle {
             color: #64748b;
-            font-size: 0.95rem;
-            margin-bottom: 24px;
+            font-size: 1rem;
+            margin-bottom: 28px;
+            line-height: 1.5;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             text-align: right;
         }
 
         label {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            color: #334155;
         }
 
         input {
@@ -66,15 +82,16 @@
             padding: 14px;
             font-size: 1rem;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 12px;
             box-sizing: border-box;
             text-align: right;
+            transition: all 0.2s ease;
         }
 
         input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
         .btn {
@@ -85,9 +102,20 @@
             background-color: var(--primary);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             margin-top: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         #result-area {
@@ -95,25 +123,47 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            padding-top: 20px;
+            padding-top: 25px;
             border-top: 2px dashed var(--border);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         #qrcode {
             margin: 20px 0;
             padding: 15px;
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .warning-box {
             background-color: #fef3c7;
             color: #b45309;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 12px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .friendly-signoff {
+            margin-top: 20px;
+            color: var(--accent-warm);
+            font-weight: bold;
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -121,8 +171,11 @@
 <body>
 
     <div class="container">
-        <h1>Meeting Attendance</h1>
-        <p>قم بإنشاء رمز (QR Code) الخاص بك لتسجيل الحضور.</p>
+        <!-- Add your logo image URL in the src attribute below -->
+        <img src="./icon-512.png" alt="Group Logo" class="logo">
+
+        <h1>St. Luke Family</h1>
+        <p class="subtitle">يلا نعمل الـ QR Code ✨</p>
 
         <form id="qr-form">
             <div class="input-group">
@@ -136,7 +189,7 @@
                 <input type="number" id="group" placeholder="مثال: 197" min="170" max="230" required>
             </div>
 
-            <button type="submit" class="btn">إنشاء الرمز</button>
+            <button type="submit" class="btn">🚀 Get My QR Code</button>
         </form>
 
         <div id="result-area">
@@ -144,8 +197,14 @@
                 📸 يرجى التقاط صورة للشاشة (Screenshot) والاحتفاظ بها لاستخدامها كل أسبوع!
             </div>
             <div id="qrcode"></div>
-            <h2 id="display-name" style="margin-bottom: 5px;"></h2>
-            <p id="display-group" style="margin-top: 0; font-weight: bold; color: var(--primary);"></p>
+            <h2 id="display-name" style="margin-bottom: 5px; color: var(--text-main);"></h2>
+            <p id="display-group" style="margin-top: 0; font-weight: bold; color: var(--primary); font-size: 1.1rem;">
+            </p>
+
+            <!-- Friendly sign-off added here -->
+            <div class="friendly-signoff">
+                هنستناك الاجتماع الجاي ❤️
+            </div>
         </div>
     </div>
 
@@ -184,7 +243,7 @@
 
             // Update UI text
             document.getElementById('display-name').textContent = name;
-            document.getElementById('display-group').textContent = `مجموعة: ${group}`;
+            document.getElementById('display-group').textContent = `دفعة: ${group}`;
 
             // Show result area and hide form button
             document.getElementById('result-area').style.display = 'flex';
